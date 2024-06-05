@@ -20,6 +20,7 @@ jobs:
     
     - name: Build Docker image
       run: |
+        cd app
         docker build -t yanpi/mlops-app:latest .
     
     - name: Push Docker image to Docker Hub
