@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mlops-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mlops-app
+  template:
+    metadata:
+      labels:
+        app: mlops-app
+    spec:
+      containers:
+      - name: mlops-container
+        image: yanpi/mlops-app:latest
+        ports:
+        - containerPort: 5000
+      imagePullSecrets:
+      - name: regcred
