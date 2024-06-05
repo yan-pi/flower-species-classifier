@@ -1,0 +1,35 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+    
+    - name: Run tests
+      run: |
+        pytest
+    
+    - name: Build Docker image
+      run: |
+        docker build -t yanpi/mlops-app:latest .
+    
+    - name: Push Docker image to Docker Hub
+      run: |
+        echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u yanpi --password-stdin
+        docker push yanpi/mlops-app:latest
+    
+    - name: Update Kubernetes deployment
+      run: |
+        kubectl set image deployment/mlops-deployment mlops-container=yanpi/mlops-app:latest
