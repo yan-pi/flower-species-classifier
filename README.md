@@ -1,66 +1,65 @@
-# MLOps-UFBA Project
+# flower-species-classifier Project
 
-Este projeto demonstra um pipeline básico de MLOps usando Docker, Kubernetes e Pyenv para gerenciar ambientes Python. Ele inclui um modelo de classificação treinado com o conjunto de dados Iris.
+This project demonstrates a basic MLOps pipeline using Docker, Kubernetes, and Pyenv to manage Python environments. It includes a classification model trained with the Iris dataset.
 
-Este modelo é uma API simples que fornece previsões sobre a espécie de uma flor com base em suas características. Ela é construída usando um modelo de aprendizado de máquina Random Forest treinado com o conjunto de dados Iris e scikit-learn.
+This model is a simple API that provides predictions about a flower's species based on its characteristics. It is built using a Random Forest machine learning model trained with the Iris dataset and scikit-learn.
 
-## Configuração
+## Setup
 
-### Pré-requisitos
+### Prerequisites
 
 - Docker
 - Kubernetes
 - Pyenv
 
-### Instalação
+### Installation
 
-1. Configure o Pyenv:
+1. Set up Pyenv:
     ```sh
     cd scripts
     ./setup_pyenv.sh
     ```
 
-2. Treine o modelo:
+2. Train the model:
     ```sh
     cd scripts
     python train_model.py
     ```
 
-3. Construa a imagem Docker:
+3. Build the Docker image:
     ```sh
     cd app
     docker build -t mlops-app:latest .
     ```
 
-4. Faça o deploy no Kubernetes:
+4. Deploy on Kubernetes:
     ```sh
     kubectl apply -f k8s/deployment.yaml
     kubectl apply -f k8s/service.yaml
     ```
 
-## Uso
+## Usage
 
-A API estará disponível em `http://<external-ip>`. Utilize um cliente HTTP (como curl ou Postman) para enviar requisições POST para `/predict`.
+The API will be available at `http://<external-ip>`. Use an HTTP client (like curl or Postman) to send POST requests to `/predict`.
 
-Exemplo de requisição:
+Example request:
 ```json
 {
   "input": [5.1, 3.5, 1.4, 0.2]
 }
 ```
-> Esses dados são os valores das características da flor que queremos classificar. O código extrai esses valores do JSON recebido, os transforma em um array numpy bidimensional (necessário para que o modelo possa fazer previsões) e, em seguida, faz a previsão usando o modelo carregado. A previsão é convertida em um número inteiro e retornada ao cliente que fez a solicitação em formato JSON.
+> These data are the feature values of the flower we want to classify. The code extracts these values from the received JSON, transforms them into a bidimensional numpy array (necessary for the model to make predictions), and then makes the prediction using the loaded model. The prediction is converted into an integer and returned to the client who made the request in JSON format.
 
-
-A resposta retornada será semelhante a:
+The returned response will be similar to:
 ```json
 {
   "prediction": 0
 }
 ```
 
-> Aqui, `"prediction"` representa a classe prevista para a espécie da flor. No conjunto de dados Iris, os números são atribuídos da seguinte forma: 
+> Here, `"prediction"` represents the predicted class for the flower species. In the Iris dataset, the numbers are assigned as follows:
 > - 0: Setosa
 > - 1: Versicolor
 > - 2: Virginica
 
-Portanto, no exemplo acima, a previsão `"prediction": 0` indica que a flor é prevista como uma espécie Setosa.
+Therefore, in the above example, the prediction `"prediction": 0` indicates that the flower is predicted to be of the Setosa species.
